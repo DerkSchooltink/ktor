@@ -83,7 +83,7 @@ public suspend fun parseHttpBody(
 ) {
     if (transferEncoding != null) {
         when {
-            transferEncoding.equalsLowerCase(other = "chunked") -> return decodeChunked(input, out, contentLength)
+            transferEncoding.equalsLowerCase(other = "chunked") -> return decodeChunked(input, out, -1L)
             transferEncoding.equalsLowerCase(other = "identity") -> {
                 // do nothing special
             }

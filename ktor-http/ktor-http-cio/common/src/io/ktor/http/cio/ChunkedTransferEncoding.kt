@@ -67,8 +67,7 @@ public suspend fun decodeChunked(input: ByteReadChannel, out: ByteWriteChannel, 
                 throw EOFException("Invalid chunk size: empty")
             }
 
-            val chunkSize =
-                if (chunkSizeBuffer.length == 1 && chunkSizeBuffer[0] == '0') 0
+            val chunkSize = if (chunkSizeBuffer.length == 1 && chunkSizeBuffer[0] == '0') 0
                 else chunkSizeBuffer.parseHexLong()
 
             if (contentLength != -1L && chunkSize > (contentLength - totalBytesCopied)) {
@@ -92,14 +91,9 @@ public suspend fun decodeChunked(input: ByteReadChannel, out: ByteWriteChannel, 
 
             if (chunkSize == 0L) break
         }
-
-        if (contentLength != -1L && totalBytesCopied != contentLength) {
-            input.cancel()
-            throw EOFException("Corrupted chunk-encoded content: steam ended before the expected number of bytes ($contentLength) were decoded.")
-        }
-    } catch (t: Throwable) {
-        out.close(t)
-        throw t
+    } catch (cause: Throwable) {
+        out.close(cause)
+        throw cause
     } finally {
         ChunkSizeBufferPool.recycle(chunkSizeBuffer)
         out.close()

@@ -138,13 +138,15 @@ internal suspend fun readResponse(
 }
 
 internal fun HttpHeadersMap.toMap(): Map<String, List<String>> {
-    val result = mutableMapOf<String, List<String>>()
+    val result = mutableMapOf<String, MutableList<String>>()
 
     for (index in 0 until size) {
         val key = nameAt(index).toString()
         val value = valueAt(index).toString()
 
-        result[key] = listOf(value)
+        if (result[key]?.add(value) == null) {
+            result[key] = mutableListOf(value)
+        }
     }
 
     return result

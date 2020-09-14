@@ -90,6 +90,8 @@ public class AndroidClientEngine(override val config: AndroidEngineConfig) : Htt
         val content: ByteReadChannel = connection.content(callContext, data)
         val headerFields: Map<String, List<String>> = connection.headerFields
             .mapKeys { it.key?.toLowerCase() ?: "" }
+            .filter { it.key.isNotBlank() }
+
         val version: HttpProtocolVersion = HttpProtocolVersion.HTTP_1_1
         val responseHeaders = HeadersImpl(headerFields)
 

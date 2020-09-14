@@ -12,6 +12,7 @@ import io.ktor.util.*
  */
 @InternalAPI
 public class CIOHeaders(private val headers: HttpHeadersMap) : Headers {
+
     private val names: Set<String> by lazy(LazyThreadSafetyMode.NONE) {
         LinkedHashSet<String>(headers.size).apply {
             for (i in 0 until headers.size) {
